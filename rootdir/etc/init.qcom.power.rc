@@ -60,20 +60,32 @@ on property:sys.boot_completed=1
     # Disable thermal
     write /sys/module/msm_thermal/core_control/enabled 0
 
-    # Enable governor for power cluster
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 80
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 0
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 691200
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 59000
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1305600
-    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "1 691200:80"
+    # configure governor settings for little cluster
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    restorecon -R /sys/devices/system/cpu # must restore after interactive
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 85
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 40000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 1382400
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack -1
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "80 400000:33 691200:25 806400:50 1017600:65 1190400:70 1305600:85 1382400:90 1401600:92 1440000:98"
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 50000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/align_windows 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 166667
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/fastlane 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/powersave_bias 1
 
-    # Enable governor for perf cluster
-    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor "interactive"
-    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 85
+    # online CPU4
+    write /sys/devices/system/cpu/cpu4/online 1
+
+    # configure governor settings for big cluster
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+    restorecon -R /sys/devices/system/cpu # must restore after interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 90
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 0
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1305600
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack -1
