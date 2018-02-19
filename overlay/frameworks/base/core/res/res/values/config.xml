@@ -304,7 +304,7 @@
 
     <!-- Does the notification LED support multiple colors?
          Used to decide if the user can change the colors -->
-    <bool name="config_multiColorNotificationLed">true</bool>
+    <!--<bool name="config_multiColorNotificationLed">true</bool>-->
 
     <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveNotificationLed">true</bool>
@@ -390,6 +390,10 @@
             16 - App switch
          For example, a device with Home, Back and Menu keys would set this
          config to 19. -->
-    <integer name="config_deviceHardwareKeys">19</integer>
+    <integer name="config_deviceHardwareKeys">83</integer>
+
+    <!--bool for backlight options-->
+    <bool name="config_button_brightness_support">true</bool>
+    <bool name="config_deviceHasVariableButtonBrightness">true</bool>
 
 </resources>
